@@ -1,14 +1,14 @@
-package ru.practicum.shareit.booking.dal;
+package ru.practicum.shareit.request.dal;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.request.model.ItemRequest;
 
 import java.util.HashMap;
 
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class BookingDao {
-	final HashMap<Long, Booking> bookingDb;
+public class RequestDal {
+	final HashMap<Long, ItemRequest> requestDb;
 }

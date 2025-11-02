@@ -1,8 +1,8 @@
 package ru.practicum.shareit.user.model.mapper;
 
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.user.model.UserDto;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.model.UserDto;
 
 @NoArgsConstructor
 public class UserMapper {

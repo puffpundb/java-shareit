@@ -1,11 +1,13 @@
 package ru.practicum.shareit.user.service;
 
+import lombok.extern.slf4j.Slf4j;
 import ru.practicum.shareit.exception.ExistException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.user.dal.UserDal;
 import ru.practicum.shareit.user.model.User;
 
+@Slf4j
 public class UserValidator {
 	public static void validateUserToCreate(User currentUserData, UserDal userDal) {
 		if (currentUserData.getName() == null || currentUserData.getName().isBlank()) {

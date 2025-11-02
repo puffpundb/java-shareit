@@ -1,4 +1,4 @@
-package ru.practicum.shareit.item.dto;
+package ru.practicum.shareit.item.model;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -13,7 +13,7 @@ public class ItemDto {
 	Long id;
 	String name;
 	String description;
-	boolean available;
-	String owner;
+	Boolean available;
+	Long owner;
 	ItemRequest request;
 }
