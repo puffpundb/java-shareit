@@ -18,7 +18,7 @@ import java.util.List;
 @Slf4j
 public class ItemController {
 	ItemService itemService;
-	final String USER_ID_HEADER = "X-Sharer-User-Id";
+	static final String USER_ID_HEADER = "X-Sharer-User-Id";
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
