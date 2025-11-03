@@ -6,12 +6,12 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.user.dal.UserDal;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserDto;
+import ru.practicum.shareit.user.model.UserDtoUpdate;
 import ru.practicum.shareit.user.model.mapper.UserMapper;
-
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -19,45 +19,42 @@ import java.util.Optional;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserServiceImpl implements UserService {
 	final UserDal userDb;
-	Long currentMaxId = 0L; // Это явно должно быть на уровне бд, но я сюда вынес, чтобы удобнее было логировать
 
 	@Override
-	public UserDto createUser(User user) {
-		log.info("Валидация пользователя. user: {}", user);
-		user.setId(currentMaxId++);
-		UserValidator.validateUserToCreate(user, userDb);
+	public UserDto createUser(UserDto user) {
+		log.info("UserService: Создание пользователя. user: {}", user);
+		User newUser = UserMapper.toUser(user);
+		if (userDb.emailExist(newUser)) throw new ValidationException("Пользователь с данным email уже существует");
 
-		return UserMapper.toUserDto(userDb.putUser(user));
+		return UserMapper.toUserDto(userDb.putUser(newUser));
 	}
 
 	@Override
-	public UserDto updateUser(Long id, User newUserData) {
-		newUserData.setId(id);
-		log.info("Проверка существования пользователя. ownerId: {}", id);
-		UserValidator.validateUserToUpdate(newUserData, userDb);
+	public UserDto updateUser(Long id, UserDtoUpdate newUserData) {
+		log.info("UserService: Обновление пользователя. newUserData: {}", newUserData);
 
-		Optional<User> optionalUser = userDb.getUser(id);
-		if (optionalUser.isEmpty()) throw new NotFoundException(String.format("Пользователь с id: %d не найден", id));
+		User dbUser = userDb.getUser(id).orElseThrow(() -> new NotFoundException(String.format("Пользователь с id: %d не найден", id)));
+		if (userDb.emailExist(UserMapper.toUser(newUserData))) throw new ValidationException("Пользователь с данным email уже существует");
 
-		User dbUser = optionalUser.get();
-		log.info("Старый пользователь. dbUser: {}", dbUser);
+		log.info("UserService: Старый пользователь. dbUser: {}", dbUser);
 		if (newUserData.getName() != null) dbUser.setName(newUserData.getName());
-		if (newUserData.getEmail() != null) dbUser.setEmail(newUserData.getEmail());
-		log.info("Обновленный пользователь. newUserData: {} \n", dbUser);
+		if (newUserData.getEmail() != null && !newUserData.getEmail().equals(dbUser.getEmail())) dbUser.setEmail(newUserData.getEmail());
+		log.info("UserService: Обновленный пользователь. newUserData: {} \n", dbUser);
 
-		return UserMapper.toUserDto(userDb.putUser(newUserData));
+		return UserMapper.toUserDto(userDb.putUser(dbUser));
 	}
 
 	@Override
 	public UserDto getUser(Long id) {
-		Optional<User> optionalUserFromDb = userDb.getUser(id);
-		if (optionalUserFromDb.isEmpty()) throw new NotFoundException(String.format("Пользователь с id: %d не найден", id));
+		log.info("UserService: Получение пользователя. id: {}", id);
+		User dbUser = userDb.getUser(id).orElseThrow(() -> new NotFoundException(String.format("Пользователь с id: %d не найден", id)));
 
-		return UserMapper.toUserDto(optionalUserFromDb.get());
+		return UserMapper.toUserDto(dbUser);
 	}
 
 	@Override
 	public void deleteUser(Long id) {
+		log.info("UserService: Удаление пользователя. id: {}", id);
 		if (userDb.deleteUser(id) == null) throw new NotFoundException(String.format("Пользователь с id: %d не найден", id));
 	}
 }

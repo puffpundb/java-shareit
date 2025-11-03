@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -19,11 +18,11 @@ import java.util.Optional;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserDal {
 	final HashMap<Long, User> usersDb;
-	final ArrayList<String> usersEmail;
+	Long currentMaxId = 0L;
 
 	public User putUser(User user) {
+		if (user.getId() == null) user.setId(currentMaxId++);
 		usersDb.put(user.getId(), user);
-		usersEmail.add(user.getEmail());
 
 		return user;
 	}
@@ -34,5 +33,10 @@ public class UserDal {
 
 	public User deleteUser(Long id) {
 		return usersDb.remove(id);
+	}
+
+	public boolean emailExist(User user) {
+		return usersDb.values().stream()
+				.anyMatch(dbUser -> !dbUser.getId().equals(user.getId()) && dbUser.getEmail().equalsIgnoreCase(user.getEmail()));
 	}
 }

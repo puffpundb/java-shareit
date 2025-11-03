@@ -3,6 +3,7 @@ package ru.practicum.shareit.user.model.mapper;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserDto;
+import ru.practicum.shareit.user.model.UserDtoUpdate;
 
 @NoArgsConstructor
 public class UserMapper {
@@ -13,5 +14,23 @@ public class UserMapper {
 		userDto.setEmail(user.getEmail());
 
 		return userDto;
+	}
+
+	public static User toUser(UserDto userDto) {
+		User user = new User();
+		user.setId(userDto.getId());
+		user.setName(userDto.getName());
+		user.setEmail(userDto.getEmail());
+
+		return user;
+	}
+
+	public static User toUser(UserDtoUpdate userDto) {
+		User user = new User();
+		user.setId(userDto.getId());
+		user.setName(userDto.getName());
+		user.setEmail(userDto.getEmail());
+
+		return user;
 	}
 }

@@ -1,7 +1,6 @@
 package ru.practicum.shareit.item.dal;
 
 import lombok.AccessLevel;
-import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -11,17 +10,19 @@ import java.util.*;
 
 @Slf4j
 @Repository
-@Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ItemDal {
 	final HashMap<Long, List<Long>> ownersItem = new HashMap<>();
 	final HashMap<Long, Item> itemHashMap = new HashMap<>();
+	Long currentMaxId = 0L;
 
 	public Optional<Item> getItem(Long id) {
 		return Optional.ofNullable(itemHashMap.get(id));
 	}
 
 	public Item putItem(Item item) {
+		if (item.getId() == null) item.setId(currentMaxId++);
+
 		if (ownersItem.containsKey(item.getOwner())) {
 			List<Long> ownerItemIds = ownersItem.get(item.getOwner());
 			ownerItemIds.add(item.getId());
@@ -36,7 +37,7 @@ public class ItemDal {
 		return item;
 	}
 
-	public List<Item> getOwnersItems(Long id) { // При работе с БД этот метод удалится, буду использовать getItem для получения предметов владельца
+	public List<Item> getOwnersItems(Long id) {
 		List<Long> ownersItemsId = ownersItem.getOrDefault(id, List.of());
 
 		return ownersItemsId.stream()
@@ -46,8 +47,6 @@ public class ItemDal {
 	}
 
 	public List<Item> getItemByNameOrDescription(String query) {
-		if (query.isBlank()) return new ArrayList<>();
-
 		String lowerCaseQuery = query.toLowerCase();
 
 		return itemHashMap.values().stream()
