@@ -9,7 +9,6 @@ import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dal.ItemDal;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemDto;
-import ru.practicum.shareit.item.model.ItemDtoUpdate;
 import ru.practicum.shareit.item.model.mapper.ItemMapper;
 import ru.practicum.shareit.user.dal.UserDal;
 
@@ -34,7 +33,7 @@ public class ItemServiceImpl implements ItemService {
 	}
 
 	@Override
-	public ItemDto updateItem(Long ownerId, Long itemId, ItemDtoUpdate itemDto) {
+	public ItemDto updateItem(Long ownerId, Long itemId, ItemDto itemDto) {
 		checkUser(ownerId);
 
 		Item newItemData = ItemMapper.toItem(itemDto);

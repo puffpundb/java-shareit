@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.model.ItemDto;
-import ru.practicum.shareit.item.model.ItemDtoUpdate;
 import ru.practicum.shareit.item.service.ItemService;
 
 import java.util.ArrayList;
@@ -35,7 +34,7 @@ public class ItemController {
 	@ResponseStatus(HttpStatus.OK)
 	public ItemDto updateItem(@RequestHeader(USER_ID_HEADER) Long ownerId,
 							  @PathVariable Long itemId,
-							  @Valid @RequestBody ItemDtoUpdate itemDto) {
+							  @RequestBody ItemDto itemDto) {
 		log.info("Controller: Запрос на обновление предмета. OwnerId: {}, itemId: {}, itemDto: {}", ownerId, itemId, itemDto);
 
 		return itemService.updateItem(ownerId, itemId, itemDto);
