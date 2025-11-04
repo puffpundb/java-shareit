@@ -3,7 +3,6 @@ package ru.practicum.shareit.item.model.mapper;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemDto;
-import ru.practicum.shareit.item.model.ItemDtoUpdate;
 
 @NoArgsConstructor
 public class ItemMapper {
@@ -20,18 +19,6 @@ public class ItemMapper {
 	}
 
 	public static Item toItem(ItemDto itemDto) {
-		Item item = new Item();
-		item.setId(itemDto.getId());
-		item.setName(itemDto.getName());
-		item.setDescription(itemDto.getDescription());
-		item.setAvailable(itemDto.getAvailable());
-		item.setOwner(itemDto.getOwner());
-		item.setRequest(itemDto.getRequest());
-
-		return item;
-	}
-
-	public static Item toItem(ItemDtoUpdate itemDto) {
 		Item item = new Item();
 		item.setId(itemDto.getId());
 		item.setName(itemDto.getName());
