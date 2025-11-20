@@ -23,13 +23,13 @@ public class ItemDal {
 	public Item putItem(Item item) {
 		if (item.getId() == null) item.setId(currentMaxId++);
 
-		if (ownersItem.containsKey(item.getOwner())) {
-			List<Long> ownerItemIds = ownersItem.get(item.getOwner());
+		if (ownersItem.containsKey(item.getOwner_id())) {
+			List<Long> ownerItemIds = ownersItem.get(item.getOwner_id());
 			ownerItemIds.add(item.getId());
 		} else {
 			List<Long> newOwnersItemIdsList = new ArrayList<>();
 			newOwnersItemIdsList.add(item.getId());
-			ownersItem.put(item.getOwner(), newOwnersItemIdsList);
+			ownersItem.put(item.getOwner_id(), newOwnersItemIdsList);
 		}
 
 		itemHashMap.put(item.getId(), item);

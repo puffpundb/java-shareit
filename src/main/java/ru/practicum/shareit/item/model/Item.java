@@ -14,6 +14,6 @@ public class Item {
 	String name;
 	String description;
 	Boolean available;
-	Long owner;
+	Long owner_id;
 	ItemRequest request;
 }

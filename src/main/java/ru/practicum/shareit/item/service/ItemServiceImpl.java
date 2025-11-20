@@ -27,7 +27,7 @@ public class ItemServiceImpl implements ItemService {
 		checkUser(ownerId);
 
 		Item newItem = ItemMapper.toItem(itemDto);
-		newItem.setOwner(ownerId);
+		newItem.setOwner_id(ownerId);
 
 		return ItemMapper.toItemDto(itemDb.putItem(newItem));
 	}
@@ -38,7 +38,7 @@ public class ItemServiceImpl implements ItemService {
 
 		Item newItemData = ItemMapper.toItem(itemDto);
 		newItemData.setId(itemId);
-		newItemData.setOwner(ownerId);
+		newItemData.setOwner_id(ownerId);
 
 		Item dbItem = itemDb.getItem(itemId).orElseThrow(() -> new NotFoundException(String.format("Предмет с id: %d не найден", itemId)));
 

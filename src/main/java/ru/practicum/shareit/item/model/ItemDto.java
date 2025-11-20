@@ -23,7 +23,7 @@ public class ItemDto {
 	@NotNull(message = "Статус не должен быть пустым")
 	Boolean available;
 
-	Long owner;
+	Long owner_id;
 
 	ItemRequest request;
 }
