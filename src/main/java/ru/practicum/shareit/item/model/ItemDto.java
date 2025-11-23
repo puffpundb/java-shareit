@@ -6,7 +6,6 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.shareit.request.model.ItemRequest;
 
 @Data
 @NoArgsConstructor
@@ -23,7 +22,7 @@ public class ItemDto {
 	@NotNull(message = "Статус не должен быть пустым")
 	Boolean available;
 
-	Long owner_id;
+	Long ownerId;
 
-	ItemRequest request;
+	Long requestId;
 }

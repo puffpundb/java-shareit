@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
-import ru.practicum.shareit.user.dal.UserDal;
+import ru.practicum.shareit.user.dal.UserRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserDto;
 import ru.practicum.shareit.user.model.UserDtoUpdate;
@@ -18,13 +18,14 @@ import ru.practicum.shareit.user.model.mapper.UserMapper;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserServiceImpl implements UserService {
-	final UserDal userDb;
+	final UserRepository userDb;
 
 	@Override
 	public UserDto createUser(UserDto user) {
 		log.info("UserService: Создание пользователя. user: {}", user);
 		User newUser = UserMapper.toUser(user);
-		if (userDb.emailExist(newUser)) throw new ValidationException("Пользователь с данным email уже существует");
+		userDb.existsByEmailIgnoreCase(user.getEmail());
+		userDb.save(newUser);
 
 		return UserMapper.toUserDto(userDb.putUser(newUser));
 	}
