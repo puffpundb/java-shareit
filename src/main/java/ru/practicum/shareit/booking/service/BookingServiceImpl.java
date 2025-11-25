@@ -24,7 +24,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class BookingServiceImpl implements BookingService{
+public class BookingServiceImpl implements BookingService {
 	final BookingRepository bookingDb;
 	final ItemService itemSrv;
 	final UserService userSrv;
