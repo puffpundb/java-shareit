@@ -1,6 +1,8 @@
 package ru.practicum.shareit.item.model.mapper;
 
 import lombok.NoArgsConstructor;
+import ru.practicum.shareit.item.model.Comment;
+import ru.practicum.shareit.item.model.CommentDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemDto;
 
@@ -13,7 +15,7 @@ public class ItemMapper {
 		itemDto.setDescription(item.getDescription());
 		itemDto.setAvailable(item.getAvailable());
 		itemDto.setOwnerId(item.getOwner().getId());
-		itemDto.setRequestId(item.getRequest().getId());
+//		itemDto.setRequestId(item.getRequest().getId());
 
 		return itemDto;
 	}
@@ -26,5 +28,15 @@ public class ItemMapper {
 		item.setAvailable(itemDto.getAvailable());
 
 		return item;
+	}
+
+	public static CommentDto toCommentDto(Comment comment) {
+		CommentDto dto = new CommentDto();
+		dto.setId(comment.getId());
+		dto.setText(comment.getText());
+		dto.setAuthorName(comment.getAuthor().getName());
+		dto.setCreated(comment.getCreated());
+
+		return dto;
 	}
 }

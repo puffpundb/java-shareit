@@ -7,6 +7,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.model.CommentDto;
+import ru.practicum.shareit.item.model.CreateCommentRequest;
 import ru.practicum.shareit.item.model.ItemDto;
 import ru.practicum.shareit.item.service.ItemService;
 
@@ -41,10 +43,10 @@ public class ItemController {
 	}
 
 	@GetMapping("/{itemId}")
-	public ItemDto getItem(@PathVariable Long itemId) {
+	public ItemDto getItem(@RequestHeader(USER_ID_HEADER) Long userId, @PathVariable Long itemId) {
 		log.info("Controller: Запрос на получение предмета. ItemId: {}", itemId);
 
-		return itemService.getItem(itemId);
+		return itemService.getItemById(itemId, userId);
 	}
 
 	@GetMapping
@@ -62,5 +64,13 @@ public class ItemController {
 
 		if (text.isBlank()) return new ArrayList<>();
 		return itemService.getSearch(text);
+	}
+
+	@PostMapping("/{itemId}/comment")
+	public CommentDto createComment(@RequestHeader(USER_ID_HEADER) Long userId,
+									@PathVariable Long itemId,
+									@Valid @RequestBody CreateCommentRequest request) {
+
+		return itemService.createComment(userId, itemId, request);
 	}
 }
