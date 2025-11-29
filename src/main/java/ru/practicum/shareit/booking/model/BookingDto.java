@@ -17,4 +17,18 @@ public class BookingDto {
 	ItemBookingDto item;
 	BookerDto booker;
 	Status status;
+
+	@Data
+	@FieldDefaults(level = AccessLevel.PRIVATE)
+	public static class BookerDto {
+		Long id;
+		String name;
+	}
+
+	@Data
+	@FieldDefaults(level = AccessLevel.PRIVATE)
+	public static class ItemBookingDto {
+		Long id;
+		String name;
+	}
 }

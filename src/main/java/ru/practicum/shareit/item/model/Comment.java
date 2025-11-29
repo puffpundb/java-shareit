@@ -19,8 +19,11 @@ public class Comment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
 
-	@Column(nullable = false, length = 1000)
+	@Column(name = "text",nullable = false, length = 1000)
 	String text;
+
+	@Column(name = "item_id", insertable = false, updatable = false)
+	Long itemId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "item_id", nullable = false)
@@ -31,5 +34,10 @@ public class Comment {
 	User author;
 
 	@Column(name = "created", nullable = false)
-	LocalDateTime created = LocalDateTime.now();
+	LocalDateTime created;
+
+	@PrePersist
+	public void setCreatedTimeOnInsert() {
+		created = LocalDateTime.now();
+	}
 }

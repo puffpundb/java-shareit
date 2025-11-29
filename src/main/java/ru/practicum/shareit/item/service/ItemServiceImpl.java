@@ -20,8 +20,8 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -93,20 +93,42 @@ public class ItemServiceImpl implements ItemService {
 		User user = userService.checkAndGetUser(ownerId);
 
 		List<Item> itemList = itemDb.findByOwnerIdOrderById(ownerId);
+		if (itemList.isEmpty()) return new ArrayList<>();
+
+		List<Long> itemIds = itemList.stream().map(Item::getId).toList();
 		LocalDateTime now = LocalDateTime.now();
+
+		List<Comment> comments = commentDb.findCommentByItemIds(itemIds);
+		List<Booking> lastBookings = bookingDb.findLastBookingsByItemIds(itemIds, now);
+		List<Booking> nextBookings = bookingDb.findNextBookingsByItemIds(itemIds, now);
+
+		Map<Long, List<Comment>> commentsByItem = comments.stream()
+				.collect(Collectors.groupingBy(Comment::getItemId));
+
+		Map<Long, List<Booking>> lastBookingsByItem = lastBookings.stream()
+				.collect(Collectors.groupingBy(Booking::getItemId));
+
+		Map<Long, List<Booking>> nextBookingsByItem = nextBookings.stream()
+				.collect(Collectors.groupingBy(Booking::getItemId));
+
 
 		return itemList.stream().map(item -> {
 			ItemDto dto = ItemMapper.toItemDto(item);
 
-			dto.setComments(commentDb.findByItemIdOrderByIdDesc(item.getId()).stream()
+			dto.setComments(commentsByItem.getOrDefault(item.getId(),
+							Collections.emptyList()).stream()
 							.map(ItemMapper::toCommentDto)
 							.toList());
-
-			dto.setLastBooking(getLastBookingInfo(item.getId(), now).orElse(null));
-			dto.setNextBooking(getNextBookingInfo(item.getId(), now).orElse(null));
-			dto.setComments(commentDb.findByItemIdOrderByIdDesc(item.getId()).stream()
-					.map(ItemMapper::toCommentDto)
-					.toList());
+			dto.setLastBooking(lastBookingsByItem.getOrDefault(item.getId(),
+							Collections.emptyList()).stream()
+							.findFirst()
+							.map(BookingMapper::toBookingInfo)
+							.orElse(null));
+			dto.setNextBooking(nextBookingsByItem.getOrDefault(item.getId(),
+							Collections.emptyList()).stream()
+							.findFirst()
+							.map(BookingMapper::toBookingInfo)
+							.orElse(null));
 
 			return dto;
 		}).toList();

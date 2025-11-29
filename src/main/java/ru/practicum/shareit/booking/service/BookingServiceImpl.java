@@ -88,12 +88,7 @@ public class BookingServiceImpl implements BookingService {
 	@Transactional(readOnly = true)
 	public List<BookingDto> getUserBookings(Long userId, String state) {
 		userSrv.checkAndGetUser(userId);
-
-		List<String> validStates = Arrays.stream(States.values()).map(States::name).toList();
-
-		if (!validStates.contains(state.toUpperCase())) {
-			throw new ValidationException("Неизвестный статус: " + state);
-		}
+		States.checkState(state);
 
 		LocalDateTime now = LocalDateTime.now();
 		List<Booking> bookings = bookingDb.findBookingsByBookerIdAndState(userId, state, now);
@@ -107,12 +102,7 @@ public class BookingServiceImpl implements BookingService {
 	@Transactional(readOnly = true)
 	public List<BookingDto> getOwnerBookings(Long ownerId, String state) {
 		userSrv.checkAndGetUser(ownerId);
-
-		List<String> validStates = Arrays.stream(States.values()).map(States::name).toList();
-
-		if (!validStates.contains(state.toUpperCase())) {
-			throw new ValidationException("Неизвестный статус: " + state);
-		}
+		States.checkState(state);
 
 		LocalDateTime now = LocalDateTime.now();
 		List<Booking> bookings = bookingDb.findBookingsByOwnerIdAndState(ownerId, state, now);

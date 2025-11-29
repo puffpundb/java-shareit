@@ -74,4 +74,18 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 	boolean existsApprovedBookingByBookerIdAndItemIdAndEndBefore(@Param("bookerId") Long bookerId,
 																 @Param("itemId") Long itemId,
 																 @Param("now") LocalDateTime now);
+
+	@Query("SELECT b FROM Booking b " +
+			"WHERE b.itemId IN :itemIds " +
+			"AND b.status = ru.practicum.shareit.booking.model.Status.APPROVED " +
+			"AND b.end <= :now " +
+			"ORDER BY b.end DESC")
+	List<Booking> findLastBookingsByItemIds(@Param("itemIds") List<Long> itemIds, @Param("now") LocalDateTime now);
+
+	@Query("SELECT b FROM Booking b " +
+			"WHERE b.itemId IN :itemIds " +
+			"AND b.status = ru.practicum.shareit.booking.model.Status.APPROVED " +
+			"AND b.start > :now " +
+			"ORDER BY b.start ASC")
+	List<Booking> findNextBookingsByItemIds(@Param("itemIds") List<Long> itemIds, @Param("now") LocalDateTime now);
 }
