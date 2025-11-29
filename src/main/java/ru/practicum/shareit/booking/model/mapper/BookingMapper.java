@@ -1,6 +1,5 @@
 package ru.practicum.shareit.booking.model.mapper;
 
-import lombok.NoArgsConstructor;
 import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.booking.model.*;
 import ru.practicum.shareit.item.model.Item;
