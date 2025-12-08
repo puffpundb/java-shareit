@@ -1,7 +1,5 @@
 package ru.practicum.shareit.user.model;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,10 +11,7 @@ import lombok.experimental.FieldDefaults;
 public class UserDto {
 	Long id;
 
-	@NotBlank(message = "Имя не должно быть пустым")
 	String name;
 
-	@NotBlank(message = "Email не должен быть пустым")
-	@Email(message = "Некорректный email")
 	String email;
 }

@@ -12,7 +12,6 @@ import ru.practicum.shareit.item.model.CreateCommentRequest;
 import ru.practicum.shareit.item.model.ItemDto;
 import ru.practicum.shareit.item.service.ItemService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -24,7 +23,7 @@ public class ItemController {
 	ItemService itemService;
 	public static final String USER_ID_HEADER = "X-Sharer-User-Id";
 
-	@PostMapping
+	@PostMapping //r
 	@ResponseStatus(HttpStatus.CREATED)
 	public ItemDto createItem(@RequestHeader(USER_ID_HEADER) Long userId, @Valid @RequestBody ItemDto itemDto) {
 		log.info("ItemController: Запрос на создание предмета. UserId: {}", userId);
@@ -32,7 +31,7 @@ public class ItemController {
 		return itemService.createItem(userId, itemDto);
 	}
 
-	@PatchMapping("/{itemId}")
+	@PatchMapping("/{itemId}") //r
 	@ResponseStatus(HttpStatus.OK)
 	public ItemDto updateItem(@RequestHeader(USER_ID_HEADER) Long ownerId,
 							  @PathVariable Long itemId,
@@ -42,14 +41,14 @@ public class ItemController {
 		return itemService.updateItem(ownerId, itemId, itemDto);
 	}
 
-	@GetMapping("/{itemId}")
+	@GetMapping("/{itemId}") //r
 	public ItemDto getItem(@RequestHeader(USER_ID_HEADER) Long userId, @PathVariable Long itemId) {
 		log.info("Controller: Запрос на получение предмета. ItemId: {}", itemId);
 
 		return itemService.getItemById(itemId, userId);
 	}
 
-	@GetMapping
+	@GetMapping //r
 	@ResponseStatus(HttpStatus.OK)
 	public List<ItemDto> getMyItems(@RequestHeader(USER_ID_HEADER) Long ownerId) {
 		log.info("Controller: Запрос на получение предметов владельца. OwnerId: {}", ownerId);
@@ -62,7 +61,6 @@ public class ItemController {
 	public List<ItemDto> searchItems(@RequestParam String text) {
 		log.info("ItemController: Запрос на поиск предметов. Строка поиска: {}", text);
 
-		if (text.isBlank()) return new ArrayList<>();
 		return itemService.getSearch(text);
 	}
 

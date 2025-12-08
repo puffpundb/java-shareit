@@ -19,7 +19,7 @@ import ru.practicum.shareit.user.service.UserService;
 public class UserController {
 	UserService userService;
 
-	@PostMapping
+	@PostMapping //ready
 	@ResponseStatus(HttpStatus.CREATED)
 	public UserDto createUser(@Valid @RequestBody UserDto newUser) {
 		log.info("UserController: Запрос на создание нового пользователя");
@@ -27,7 +27,7 @@ public class UserController {
 		return userService.createUser(newUser);
 	}
 
-	@GetMapping("/{userId}")
+	@GetMapping("/{userId}") //ready
 	@ResponseStatus(HttpStatus.OK)
 	public UserDto getUser(@PathVariable Long userId) {
 		log.info("UserController: Запрос на получение пользователя");
@@ -35,7 +35,7 @@ public class UserController {
 		return userService.getUser(userId);
 	}
 
-	@PatchMapping("/{userId}")
+	@PatchMapping("/{userId}") //ready
 	@ResponseStatus(HttpStatus.OK)
 	public UserDto updateUserData(@PathVariable Long userId, @Valid @RequestBody UserDtoUpdate newUserData) {
 		log.info("UserController: Запрос на обновление пользователя");
@@ -43,7 +43,7 @@ public class UserController {
 		return userService.updateUser(userId, newUserData);
 	}
 
-	@DeleteMapping("/{userId}")
+	@DeleteMapping("/{userId}") //ready
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteUser(@PathVariable Long userId) {
 		log.info("UserController: Запрос на удаление пользователя");

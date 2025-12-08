@@ -1,5 +1,6 @@
-package ru.practicum.shareit.booking.model;
+package ru.practicum.shareit.request.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,10 +11,11 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class BookingDtoRequest {
-	Long itemId;
+public class ItemRequestWithoutItemsDto {
+	Long id;
 
-	LocalDateTime start;
+	@NotNull
+	String description;
 
-	LocalDateTime end;
+	LocalDateTime created;
 }

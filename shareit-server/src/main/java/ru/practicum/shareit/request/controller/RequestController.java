@@ -23,7 +23,7 @@ import static ru.practicum.shareit.item.controller.ItemController.USER_ID_HEADER
 public class RequestController {
 	RequestService requestService;
 
-	@PostMapping
+	@PostMapping //ready
 	@ResponseStatus(HttpStatus.CREATED)
 	public ItemRequestWithoutItemsDto createRequest(@RequestHeader(USER_ID_HEADER) Long userId,
 													@Valid @RequestBody ItemRequestWithoutItemsDto itemRequestWithoutItemsDto) {
@@ -32,14 +32,14 @@ public class RequestController {
 		return requestService.createRequest(userId, itemRequestWithoutItemsDto);
 	}
 
-	@GetMapping
+	@GetMapping //ready
 	public List<ItemRequestWithItemsDto> getOwnRequests(@RequestHeader(USER_ID_HEADER) Long userId) {
 		log.info("RequestController: Запрос на получение реквестов. id: {}", userId);
 
 		return requestService.getOwnRequests(userId);
 	}
 
-	@GetMapping("/all")
+	@GetMapping("/all") //r
 	public List<ItemRequestWithoutItemsDto> getAllRequests(@RequestHeader(USER_ID_HEADER) Long userId) {
 		log.info("RequestController: Запрос на получение всех реквестов. id: {}", userId);
 
