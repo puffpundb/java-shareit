@@ -26,7 +26,7 @@ public class ItemRequestWithItemsDto {
 	public static class ItemDtoForRequest {
 		Long id;
 
-		String Name;
+		String name;
 
 		Long ownerId;
 	}
