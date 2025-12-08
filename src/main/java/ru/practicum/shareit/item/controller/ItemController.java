@@ -22,7 +22,7 @@ import java.util.List;
 @Slf4j
 public class ItemController {
 	ItemService itemService;
-	static final String USER_ID_HEADER = "X-Sharer-User-Id";
+	public static final String USER_ID_HEADER = "X-Sharer-User-Id";
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)

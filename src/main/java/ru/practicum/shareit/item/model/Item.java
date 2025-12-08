@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
 @Data
@@ -31,7 +30,6 @@ public class Item {
 	@JoinColumn(name = "owner_id", nullable = false)
 	User owner;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "request_id")
-	ItemRequest request;
+	@Column(name = "request_id")
+	Long requestId;
 }
