@@ -1,6 +1,5 @@
 package ru.practicum.shareit.request.controller;
 
-import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -26,7 +25,7 @@ public class RequestController {
 	@PostMapping //ready
 	@ResponseStatus(HttpStatus.CREATED)
 	public ItemRequestWithoutItemsDto createRequest(@RequestHeader(USER_ID_HEADER) Long userId,
-													@Valid @RequestBody ItemRequestWithoutItemsDto itemRequestWithoutItemsDto) {
+													@RequestBody ItemRequestWithoutItemsDto itemRequestWithoutItemsDto) {
 		log.info("RequestController: Запрос на создание реквеста. id: {}, ItemRequest: {}", userId, itemRequestWithoutItemsDto);
 
 		return requestService.createRequest(userId, itemRequestWithoutItemsDto);
