@@ -51,13 +51,7 @@ class ItemControllerTest {
 
 		when(itemService.createItem(eq(userId), any(ItemDto.class))).thenReturn(response);
 
-		String json = """
-                {
-                  "name": "Item",
-                  "description": "Desc",
-                  "available": true
-                }
-                """;
+		String json = "{\"name\":\"Item\",\"description\":\"Desc\",\"available\":true}";
 
 		mvc.perform(post("/items")
 						.header(ItemController.USER_ID_HEADER, userId)
@@ -83,13 +77,7 @@ class ItemControllerTest {
 
 		when(itemService.updateItem(eq(ownerId), eq(itemId), any(ItemDto.class))).thenReturn(response);
 
-		String json = """
-                {
-                  "name": "Updated",
-                  "description": "New desc",
-                  "available": false
-                }
-                """;
+		String json = "{\"name\":\"Updated\",\"description\":\"New desc\",\"available\":false}";
 
 		mvc.perform(patch("/items/{itemId}", itemId)
 						.header(ItemController.USER_ID_HEADER, ownerId)
@@ -179,11 +167,7 @@ class ItemControllerTest {
 		when(itemService.createComment(eq(userId), eq(itemId), any(CreateCommentRequest.class)))
 				.thenReturn(response);
 
-		String json = """
-                {
-                  "text": "Nice"
-                }
-                """;
+		String json = "{\"text\":\"Nice\"}";
 
 		mvc.perform(post("/items/{itemId}/comment", itemId)
 						.header(ItemController.USER_ID_HEADER, userId)

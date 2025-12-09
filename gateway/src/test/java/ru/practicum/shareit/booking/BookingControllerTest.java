@@ -30,12 +30,9 @@ class BookingControllerTest {
 
 	@Test
 	void createBooking() throws Exception {
-		String requestJson = """
-            {"itemId":1,"start":"2025-12-10T10:00:00","end":"2025-12-11T10:00:00"}
-            """;
-		String responseJson = """
-            {"id":1,"start":"2025-12-10T10:00:00","end":"2025-12-11T10:00:00","status":"WAITING"}
-            """;
+		String requestJson = "{\"itemId\":1,\"start\":\"2025-12-10T10:00:00\",\"end\":\"2025-12-11T10:00:00\"}";
+		String responseJson = "{\"id\":1,\"start\":\"2025-12-10T10:00:00\",\"end\":\"2025-12-11T10:00:00\",\"status\":\"WAITING\"}";
+
 		when(bookingClient.createBooking(eq(1L), any(BookingDtoRequest.class)))
 				.thenReturn(ResponseEntity.status(201).body(responseJson.getBytes()));
 
@@ -48,9 +45,8 @@ class BookingControllerTest {
 
 	@Test
 	void approveBooking() throws Exception {
-		String responseJson = """
-            {"id":1,"status":"APPROVED"}
-            """;
+		String responseJson = "{\"id\":1,\"status\":\"APPROVED\"}";
+
 		when(bookingClient.approveBooking(eq(1L), eq(1L), eq(true)))
 				.thenReturn(ResponseEntity.ok().body(responseJson.getBytes()));
 
@@ -62,9 +58,8 @@ class BookingControllerTest {
 
 	@Test
 	void getBooking() throws Exception {
-		String responseJson = """
-            {"id":1,"status":"WAITING"}
-            """;
+		String responseJson = "{\"id\":1,\"status\":\"WAITING\"}";
+
 		when(bookingClient.getBooking(eq(1L), eq(1L)))
 				.thenReturn(ResponseEntity.ok().body(responseJson.getBytes()));
 

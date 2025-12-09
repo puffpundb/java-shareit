@@ -45,12 +45,7 @@ class UserControllerTest {
 
 		when(userService.createUser(any(UserDto.class))).thenReturn(response);
 
-		String json = """
-                {
-                  "name": "User",
-                  "email": "user@test.com"
-                }
-                """;
+		String json = "{\"name\":\"User\",\"email\":\"user@test.com\"}";
 
 		mvc.perform(post("/users")
 						.contentType(MediaType.APPLICATION_JSON)
@@ -95,12 +90,7 @@ class UserControllerTest {
 
 		when(userService.updateUser(eq(userId), any(UserDtoUpdate.class))).thenReturn(response);
 
-		String json = """
-                {
-                  "name": "New",
-                  "email": "new@test.com"
-                }
-                """;
+		String json = "{\"name\":\"New\",\"email\":\"new@test.com\"}";
 
 		mvc.perform(patch("/users/{userId}", userId)
 						.contentType(MediaType.APPLICATION_JSON)

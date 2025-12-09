@@ -31,12 +31,8 @@ class RequestControllerTest {
 
 	@Test
 	void createRequest() throws Exception {
-		String requestJson = """
-            {"description":"Need a drill"}
-            """;
-		String responseJson = """
-            {"id":1,"description":"Need a drill","created":"2025-12-08T12:00:00"}
-            """;
+		String requestJson = "{\"description\":\"Need a drill\"}";
+		String responseJson = "{\"id\":1,\"description\":\"Need a drill\",\"created\":\"2025-12-08T12:00:00\"}";
 
 		when(requestClient.createRequest(eq(1L), any(ItemRequestWithoutItemsDto.class)))
 				.thenReturn(ResponseEntity.ok().body(responseJson.getBytes()));
@@ -52,9 +48,7 @@ class RequestControllerTest {
 
 	@Test
 	void getOwnRequests() throws Exception {
-		String responseJson = """
-            [{"id":1,"description":"Need a drill","created":"2025-12-08T12:00:00","items":[]}]
-            """;
+		String responseJson = "[{\"id\":1,\"description\":\"Need a drill\",\"created\":\"2025-12-08T12:00:00\",\"items\":[]}]";
 
 		when(requestClient.getOwnRequest(eq(1L)))
 				.thenReturn(ResponseEntity.ok().body(responseJson.getBytes()));
@@ -67,9 +61,7 @@ class RequestControllerTest {
 
 	@Test
 	void getAllRequest() throws Exception {
-		String responseJson = """
-            [{"id":2,"description":"Need a saw","created":"2025-12-08T12:00:00"}]
-            """;
+		String responseJson = "[{\"id\":2,\"description\":\"Need a saw\",\"created\":\"2025-12-08T12:00:00\"}]";
 
 		when(requestClient.getAllRequest(eq(1L)))
 				.thenReturn(ResponseEntity.ok().body(responseJson.getBytes()));
@@ -82,9 +74,7 @@ class RequestControllerTest {
 
 	@Test
 	void getRequestById() throws Exception {
-		String responseJson = """
-            {"id":1,"description":"Need a drill","created":"2025-12-08T12:00:00","items":[]}
-            """;
+		String responseJson = "{\"id\":1,\"description\":\"Need a drill\",\"created\":\"2025-12-08T12:00:00\",\"items\":[]}";
 
 		when(requestClient.getRequestById(eq(1L)))
 				.thenReturn(ResponseEntity.ok().body(responseJson.getBytes()));

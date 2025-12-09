@@ -54,13 +54,7 @@ class BookingControllerTest {
 
 		when(bookingService.createBooking(eq(userId), any(BookingDtoRequest.class))).thenReturn(response);
 
-		String json = """
-                {
-                  "itemId": 100,
-                  "start": "2030-01-01T10:00:00",
-                  "end": "2030-01-01T12:00:00"
-                }
-                """;
+		String json = "{\"itemId\":100,\"start\":\"2030-01-01T10:00:00\",\"end\":\"2030-01-01T12:00:00\"}";
 
 		mvc.perform(post("/bookings")
 						.header(BookingController.USER_ID_HEADER, userId)

@@ -29,12 +29,8 @@ class ItemControllerTest {
 
 	@Test
 	void createItem() throws Exception {
-		String requestJson = """
-            {"name":"Item","description":"Desc","available":true}
-            """;
-		String responseJson = """
-            {"id":1,"name":"Item","description":"Desc","available":true,"ownerId":1}
-            """;
+		String requestJson = "{\"name\":\"Item\",\"description\":\"Desc\",\"available\":true}";
+		String responseJson = "{\"id\":1,\"name\":\"Item\",\"description\":\"Desc\",\"available\":true,\"ownerId\":1}";
 
 		when(itemClient.createItem(eq(1L), any(ItemDto.class)))
 				.thenReturn(ResponseEntity.ok().body(responseJson.getBytes()));
@@ -50,9 +46,7 @@ class ItemControllerTest {
 
 	@Test
 	void getItem() throws Exception {
-		String responseJson = """
-            {"id":1,"name":"Item","description":"Desc","available":true,"ownerId":1,"lastBooking":null,"nextBooking":null,"comments":[]}
-            """;
+		String responseJson = "{\"id\":1,\"name\":\"Item\",\"description\":\"Desc\",\"available\":true,\"ownerId\":1,\"lastBooking\":null,\"nextBooking\":null,\"comments\":[]}";
 
 		when(itemClient.getItem(eq(1L), eq(1L)))
 				.thenReturn(ResponseEntity.ok().body(responseJson.getBytes()));
@@ -65,12 +59,8 @@ class ItemControllerTest {
 
 	@Test
 	void updateItem() throws Exception {
-		String requestJson = """
-            {"name":"Updated","description":"New desc","available":false}
-            """;
-		String responseJson = """
-            {"id":1,"name":"Updated","description":"New desc","available":false,"ownerId":1}
-            """;
+		String requestJson = "{\"name\":\"Updated\",\"description\":\"New desc\",\"available\":false}";
+		String responseJson = "{\"id\":1,\"name\":\"Updated\",\"description\":\"New desc\",\"available\":false,\"ownerId\":1}";
 
 		when(itemClient.updateItem(eq(1L), eq(1L), any(ItemDto.class)))
 				.thenReturn(ResponseEntity.ok().body(responseJson.getBytes()));
@@ -94,9 +84,7 @@ class ItemControllerTest {
 
 	@Test
 	void searchItems() throws Exception {
-		String responseJson = """
-             [{"id":1,"name":"Drill","description":"Powerful","available":true,"ownerId":2}]
-             """;
+		String responseJson = "[{\"id\":1,\"name\":\"Drill\",\"description\":\"Powerful\",\"available\":true,\"ownerId\":2}]";
 
 		when(itemClient.searchItems(eq("drill"), eq(1L)))
 				.thenReturn(ResponseEntity.ok().body(responseJson.getBytes()));
@@ -110,9 +98,7 @@ class ItemControllerTest {
 
 	@Test
 	void getMyItems() throws Exception {
-		String responseJson = """
-             [{"id":1,"name":"Item","description":"Desc","available":true,"ownerId":1}]
-             """;
+		String responseJson = "[{\"id\":1,\"name\":\"Item\",\"description\":\"Desc\",\"available\":true,\"ownerId\":1}]";
 
 		when(itemClient.getMyItems(eq(1L)))
 				.thenReturn(ResponseEntity.ok().body(responseJson.getBytes()));
@@ -125,12 +111,8 @@ class ItemControllerTest {
 
 	@Test
 	void createComment() throws Exception {
-		String requestJson = """
-            {"text":"Great!"}
-            """;
-		String responseJson = """
-            {"id":1,"text":"Great!","authorName":"User","created":"2025-12-08T10:00:00"}
-            """;
+		String requestJson = "{\"text\":\"Great!\"}";
+		String responseJson = "{\"id\":1,\"text\":\"Great!\",\"authorName\":\"User\",\"created\":\"2025-12-08T10:00:00\"}";
 
 		when(itemClient.createComment(eq(1L), eq(1L), any()))
 				.thenReturn(ResponseEntity.ok().body(responseJson.getBytes()));

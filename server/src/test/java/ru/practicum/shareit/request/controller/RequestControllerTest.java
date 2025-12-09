@@ -52,11 +52,7 @@ class RequestControllerTest {
 		when(requestService.createRequest(eq(userId), any(ItemRequestWithoutItemsDto.class)))
 				.thenReturn(response);
 
-		String json = """
-                {
-                  "description": "Need item"
-                }
-                """;
+		String json = "{\"description\":\"Need item\"}";
 
 		mvc.perform(post("/requests")
 						.header(USER_ID_HEADER, userId)

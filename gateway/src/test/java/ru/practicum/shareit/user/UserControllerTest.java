@@ -30,12 +30,8 @@ class UserControllerTest {
 
 	@Test
 	void createUser() throws Exception {
-		String requestJson = """
-        {"name":"User","email":"user@example.com"}
-        """;
-		String responseJson = """
-        {"id":1,"name":"User","email":"user@example.com"}
-        """;
+		String requestJson = "{\"name\":\"User\",\"email\":\"user@example.com\"}";
+		String responseJson = "{\"id\":1,\"name\":\"User\",\"email\":\"user@example.com\"}";
 
 		when(userClient.createUser(any(UserDto.class)))
 				.thenReturn(ResponseEntity.ok().body(responseJson.getBytes()));
@@ -50,9 +46,7 @@ class UserControllerTest {
 
 	@Test
 	void getUser() throws Exception {
-		String jsonResponse = """
-        {"id":1,"name":"User","email":"user@example.com"}
-        """;
+		String jsonResponse = "{\"id\":1,\"name\":\"User\",\"email\":\"user@example.com\"}";
 
 		when(userClient.getUser(1L))
 				.thenReturn(ResponseEntity.ok().body(jsonResponse.getBytes()));
@@ -69,9 +63,8 @@ class UserControllerTest {
 		request.setName("Updated");
 		request.setEmail("updated@example.com");
 
-		String jsonResponse = """
-        {"id":1,"name":"Updated","email":"updated@example.com"}
-        """;
+		String jsonResponse = "{\"id\":1,\"name\":\"Updated\",\"email\":\"updated@example.com\"}";
+
 		when(userClient.updateUser(1L, request))
 				.thenReturn(ResponseEntity.ok().body(jsonResponse.getBytes()));
 
