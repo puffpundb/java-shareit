@@ -11,13 +11,9 @@ import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dal.CommentRepository;
 import ru.practicum.shareit.item.dal.ItemRepository;
-import ru.practicum.shareit.item.model.Comment;
-import ru.practicum.shareit.item.model.CommentDto;
-import ru.practicum.shareit.item.model.CreateCommentRequest;
-import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.model.ItemDto;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.item.model.*;
 import ru.practicum.shareit.user.dal.UserRepository;
+import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 

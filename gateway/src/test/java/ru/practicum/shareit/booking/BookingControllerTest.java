@@ -10,6 +10,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
 import ru.practicum.shareit.booking.dto.BookingState;
 
+import java.time.LocalDateTime;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -26,12 +28,18 @@ class BookingControllerTest {
 	private BookingClient bookingClient;
 
 	@Autowired
-	private ObjectMapper mapper;
+	private ObjectMapper objectMapper;
 
 	@Test
 	void createBooking() throws Exception {
-		String requestJson = "{\"itemId\":1,\"start\":\"2025-12-10T10:00:00\",\"end\":\"2025-12-11T10:00:00\"}";
-		String responseJson = "{\"id\":1,\"start\":\"2025-12-10T10:00:00\",\"end\":\"2025-12-11T10:00:00\",\"status\":\"WAITING\"}";
+		LocalDateTime start = LocalDateTime.now().plusDays(1);
+		LocalDateTime end = LocalDateTime.now().plusDays(2);
+
+		BookingDtoRequest dto = new BookingDtoRequest(1L, start, end);
+
+		String requestJson = objectMapper.writeValueAsString(dto);
+
+		String responseJson = "{\"id\":1,\"start\":\"" + start + "\",\"end\":\"" + end + "\",\"status\":\"WAITING\"}";
 
 		when(bookingClient.createBooking(eq(1L), any(BookingDtoRequest.class)))
 				.thenReturn(ResponseEntity.status(201).body(responseJson.getBytes()));
