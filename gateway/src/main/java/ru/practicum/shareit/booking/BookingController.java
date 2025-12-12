@@ -1,7 +1,9 @@
 package ru.practicum.shareit.booking;
 
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,8 +18,9 @@ import ru.practicum.shareit.booking.dto.BookingState;
 @RequiredArgsConstructor
 @Slf4j
 @Validated
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class BookingController {
-	private final BookingClient bookingClient;
+	final BookingClient bookingClient;
 
 	@GetMapping
 	public ResponseEntity<Object> getBookings(@RequestHeader("X-Sharer-User-Id") long userId,

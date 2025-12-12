@@ -1,13 +1,13 @@
 package ru.practicum.shareit.user.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.practicum.shareit.user.model.UserDto;
 import ru.practicum.shareit.user.model.UserDtoUpdate;
 import ru.practicum.shareit.user.service.UserService;
@@ -21,23 +21,21 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(UserController.class)
+@AutoConfigureMockMvc
 class UserControllerTest {
 
-	@Mock
+	@MockBean
 	UserService userService;
 
-	@InjectMocks
-	UserController userController;
+	@Autowired
+	private MockMvc mockMvc;
 
-	private MockMvc mockMvc() {
-		return MockMvcBuilders.standaloneSetup(userController).build();
-	}
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@Test
 	void createUser() throws Exception {
-		MockMvc mvc = mockMvc();
-
 		UserDto response = new UserDto();
 		response.setId(1L);
 		response.setName("User");
@@ -45,11 +43,13 @@ class UserControllerTest {
 
 		when(userService.createUser(any(UserDto.class))).thenReturn(response);
 
-		String json = "{\"name\":\"User\",\"email\":\"user@test.com\"}";
+		UserDto request = new UserDto();
+		request.setName("User");
+		request.setEmail("user@test.com");
 
-		mvc.perform(post("/users")
+		mockMvc.perform(post("/users")
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(json))
+						.content(objectMapper.writeValueAsString(request)))
 				.andExpect(status().isCreated())
 				.andExpect(jsonPath("$.id", is(1)))
 				.andExpect(jsonPath("$.name", is("User")))
@@ -58,7 +58,6 @@ class UserControllerTest {
 
 	@Test
 	void getUser() throws Exception {
-		MockMvc mvc = mockMvc();
 		Long userId = 1L;
 
 		UserDto response = new UserDto();
@@ -68,7 +67,7 @@ class UserControllerTest {
 
 		when(userService.getUser(userId)).thenReturn(response);
 
-		mvc.perform(get("/users/{userId}", userId))
+		mockMvc.perform(get("/users/{userId}", userId))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.id", is(1)))
 				.andExpect(jsonPath("$.email", is("user@test.com")));
@@ -76,7 +75,6 @@ class UserControllerTest {
 
 	@Test
 	void updateUserData() throws Exception {
-		MockMvc mvc = mockMvc();
 		Long userId = 1L;
 
 		UserDtoUpdate update = new UserDtoUpdate();
@@ -90,11 +88,9 @@ class UserControllerTest {
 
 		when(userService.updateUser(eq(userId), any(UserDtoUpdate.class))).thenReturn(response);
 
-		String json = "{\"name\":\"New\",\"email\":\"new@test.com\"}";
-
-		mvc.perform(patch("/users/{userId}", userId)
+		mockMvc.perform(patch("/users/{userId}", userId)
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(json))
+						.content(objectMapper.writeValueAsString(update)))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.id", is(1)))
 				.andExpect(jsonPath("$.name", is("New")))
@@ -103,12 +99,11 @@ class UserControllerTest {
 
 	@Test
 	void deleteUser() throws Exception {
-		MockMvc mvc = mockMvc();
 		Long userId = 1L;
 
 		doNothing().when(userService).deleteUser(userId);
 
-		mvc.perform(delete("/users/{userId}", userId))
+		mockMvc.perform(delete("/users/{userId}", userId))
 				.andExpect(status().isNoContent());
 	}
 }

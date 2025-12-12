@@ -1,6 +1,8 @@
 package ru.practicum.shareit.item;
 
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +16,9 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import java.util.Map;
 
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ItemClient extends BaseClient {
-	private static final String API_PREFIX_ITEMS = "/items";
+	static final String API_PREFIX_ITEMS = "/items";
 
 	public ItemClient(@Value("${shareit-server.url}") String serverUrl, RestTemplateBuilder builder) {
 		super(builder.uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + API_PREFIX_ITEMS))

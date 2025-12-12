@@ -1,6 +1,6 @@
 package ru.practicum.shareit.request.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.List;
 public class ItemRequestWithItemsDto {
 	Long id;
 
-	@NotNull
+	@NotBlank
 	String description;
 
 	LocalDateTime created;

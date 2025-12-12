@@ -1,13 +1,13 @@
 package ru.practicum.shareit.request.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.practicum.shareit.request.model.ItemRequestWithItemsDto;
 import ru.practicum.shareit.request.model.ItemRequestWithoutItemsDto;
 import ru.practicum.shareit.request.service.RequestService;
@@ -26,22 +26,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.practicum.shareit.item.controller.ItemController.USER_ID_HEADER;
 
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(RequestController.class)
+@AutoConfigureMockMvc
 class RequestControllerTest {
 
-	@Mock
+	@MockBean
 	RequestService requestService;
 
-	@InjectMocks
-	RequestController requestController;
+	@Autowired
+	private MockMvc mockMvc;
 
-	private MockMvc mockMvc() {
-		return MockMvcBuilders.standaloneSetup(requestController).build();
-	}
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@Test
 	void createRequest() throws Exception {
-		MockMvc mvc = mockMvc();
 		Long userId = 1L;
 
 		ItemRequestWithoutItemsDto response = new ItemRequestWithoutItemsDto();
@@ -52,12 +51,13 @@ class RequestControllerTest {
 		when(requestService.createRequest(eq(userId), any(ItemRequestWithoutItemsDto.class)))
 				.thenReturn(response);
 
-		String json = "{\"description\":\"Need item\"}";
+		ItemRequestWithoutItemsDto request = new ItemRequestWithoutItemsDto();
+		request.setDescription("Need item");
 
-		mvc.perform(post("/requests")
+		mockMvc.perform(post("/requests")
 						.header(USER_ID_HEADER, userId)
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(json))
+						.content(objectMapper.writeValueAsString(request)))
 				.andExpect(status().isCreated())
 				.andExpect(jsonPath("$.id", is(10)))
 				.andExpect(jsonPath("$.description", is("Need item")));
@@ -65,7 +65,6 @@ class RequestControllerTest {
 
 	@Test
 	void getOwnRequests() throws Exception {
-		MockMvc mvc = mockMvc();
 		Long userId = 1L;
 
 		ItemRequestWithItemsDto dto1 = new ItemRequestWithItemsDto();
@@ -78,7 +77,7 @@ class RequestControllerTest {
 
 		when(requestService.getOwnRequests(userId)).thenReturn(List.of(dto1, dto2));
 
-		mvc.perform(get("/requests")
+		mockMvc.perform(get("/requests")
 						.header(USER_ID_HEADER, userId))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$", hasSize(2)))
@@ -88,7 +87,6 @@ class RequestControllerTest {
 
 	@Test
 	void getAllRequests() throws Exception {
-		MockMvc mvc = mockMvc();
 		Long userId = 1L;
 
 		ItemRequestWithoutItemsDto dto = new ItemRequestWithoutItemsDto();
@@ -97,7 +95,7 @@ class RequestControllerTest {
 
 		when(requestService.getOtherRequest(userId)).thenReturn(List.of(dto));
 
-		mvc.perform(get("/requests/all")
+		mockMvc.perform(get("/requests/all")
 						.header(USER_ID_HEADER, userId))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$", hasSize(1)))
@@ -107,7 +105,6 @@ class RequestControllerTest {
 
 	@Test
 	void getRequestById() throws Exception {
-		MockMvc mvc = mockMvc();
 		Long requestId = 10L;
 
 		ItemRequestWithItemsDto dto = new ItemRequestWithItemsDto();
@@ -116,7 +113,7 @@ class RequestControllerTest {
 
 		when(requestService.getRequestById(requestId)).thenReturn(dto);
 
-		mvc.perform(get("/requests/{requestId}", requestId))
+		mockMvc.perform(get("/requests/{requestId}", requestId))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.id", is(10)))
 				.andExpect(jsonPath("$.description", is("Req")));

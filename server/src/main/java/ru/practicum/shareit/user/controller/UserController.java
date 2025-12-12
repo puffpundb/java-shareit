@@ -1,6 +1,5 @@
 package ru.practicum.shareit.user.controller;
 
-import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -21,7 +20,7 @@ public class UserController {
 
 	@PostMapping //ready
 	@ResponseStatus(HttpStatus.CREATED)
-	public UserDto createUser(@Valid @RequestBody UserDto newUser) {
+	public UserDto createUser(@RequestBody UserDto newUser) {
 		log.info("UserController: Запрос на создание нового пользователя");
 
 		return userService.createUser(newUser);
@@ -37,7 +36,7 @@ public class UserController {
 
 	@PatchMapping("/{userId}") //ready
 	@ResponseStatus(HttpStatus.OK)
-	public UserDto updateUserData(@PathVariable Long userId, @Valid @RequestBody UserDtoUpdate newUserData) {
+	public UserDto updateUserData(@PathVariable Long userId, @RequestBody UserDtoUpdate newUserData) {
 		log.info("UserController: Запрос на обновление пользователя");
 
 		return userService.updateUser(userId, newUserData);

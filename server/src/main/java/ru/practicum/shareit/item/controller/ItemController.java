@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item.controller;
 
-import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -25,7 +24,7 @@ public class ItemController {
 
 	@PostMapping //r
 	@ResponseStatus(HttpStatus.CREATED)
-	public ItemDto createItem(@RequestHeader(USER_ID_HEADER) Long userId, @Valid @RequestBody ItemDto itemDto) {
+	public ItemDto createItem(@RequestHeader(USER_ID_HEADER) Long userId, @RequestBody ItemDto itemDto) {
 		log.info("ItemController: Запрос на создание предмета. UserId: {}", userId);
 
 		return itemService.createItem(userId, itemDto);
@@ -67,7 +66,7 @@ public class ItemController {
 	@PostMapping("/{itemId}/comment")
 	public CommentDto createComment(@RequestHeader(USER_ID_HEADER) Long userId,
 									@PathVariable Long itemId,
-									@Valid @RequestBody CreateCommentRequest request) {
+									@RequestBody CreateCommentRequest request) {
 
 		return itemService.createComment(userId, itemId, request);
 	}

@@ -1,7 +1,9 @@
 package ru.practicum.shareit.user;
 
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +18,9 @@ import ru.practicum.shareit.user.dto.UserDtoUpdate;
 @RequiredArgsConstructor
 @Slf4j
 @Validated
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserController {
-	private final UserClient userClient;
+	final UserClient userClient;
 
 	@PostMapping
 	public ResponseEntity<Object> createUser(@Valid @RequestBody UserDto userDto) {

@@ -1,5 +1,7 @@
 package ru.practicum.shareit.request;
 
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
@@ -10,8 +12,9 @@ import ru.practicum.shareit.client.BaseClient;
 import ru.practicum.shareit.request.dto.ItemRequestWithoutItemsDto;
 
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class RequestClient extends BaseClient {
-	private static final String API_PREFIX_REQUEST = "/requests";
+	static final String API_PREFIX_REQUEST = "/requests";
 
 	public RequestClient(@Value("${shareit-server.url}") String serverUrl, RestTemplateBuilder builder) {
 		super(builder.uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl + API_PREFIX_REQUEST))

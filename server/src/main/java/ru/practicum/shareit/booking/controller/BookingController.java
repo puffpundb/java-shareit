@@ -1,6 +1,5 @@
 package ru.practicum.shareit.booking.controller;
 
-import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,7 +22,7 @@ public class BookingController {
 
 	@PostMapping //ready
 	public BookingDto createBooking(@RequestHeader(USER_ID_HEADER) Long bookerId,
-									@Valid @RequestBody BookingDtoRequest request) {
+									@RequestBody BookingDtoRequest request) {
 
 		return bookingService.createBooking(bookerId, request);
 	}

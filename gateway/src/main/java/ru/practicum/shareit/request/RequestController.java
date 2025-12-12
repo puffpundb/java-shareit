@@ -1,7 +1,9 @@
 package ru.practicum.shareit.request;
 
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,8 +16,9 @@ import ru.practicum.shareit.request.dto.ItemRequestWithoutItemsDto;
 @RequiredArgsConstructor
 @Slf4j
 @Validated
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class RequestController {
-	private final RequestClient requestClient;
+	final RequestClient requestClient;
 
 	@PostMapping
 	public ResponseEntity<Object> createRequest(@RequestHeader("X-Sharer-User-Id") long userId,

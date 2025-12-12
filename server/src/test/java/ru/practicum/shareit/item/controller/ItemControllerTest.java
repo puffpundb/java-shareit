@@ -1,13 +1,13 @@
 package ru.practicum.shareit.item.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.practicum.shareit.item.model.CommentDto;
 import ru.practicum.shareit.item.model.CreateCommentRequest;
 import ru.practicum.shareit.item.model.ItemDto;
@@ -25,22 +25,21 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(ItemController.class)
+@AutoConfigureMockMvc
 class ItemControllerTest {
 
-	@Mock
+	@MockBean
 	ItemService itemService;
 
-	@InjectMocks
-	ItemController itemController;
+	@Autowired
+	private MockMvc mockMvc;
 
-	private MockMvc mockMvc() {
-		return MockMvcBuilders.standaloneSetup(itemController).build();
-	}
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@Test
 	void createItem() throws Exception {
-		MockMvc mvc = mockMvc();
 		Long userId = 1L;
 
 		ItemDto response = new ItemDto();
@@ -51,12 +50,15 @@ class ItemControllerTest {
 
 		when(itemService.createItem(eq(userId), any(ItemDto.class))).thenReturn(response);
 
-		String json = "{\"name\":\"Item\",\"description\":\"Desc\",\"available\":true}";
+		ItemDto request = new ItemDto();
+		request.setName("Item");
+		request.setDescription("Desc");
+		request.setAvailable(true);
 
-		mvc.perform(post("/items")
+		mockMvc.perform(post("/items")
 						.header(ItemController.USER_ID_HEADER, userId)
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(json))
+						.content(objectMapper.writeValueAsString(request)))
 				.andExpect(status().isCreated())
 				.andExpect(jsonPath("$.id", is(10)))
 				.andExpect(jsonPath("$.name", is("Item")))
@@ -65,7 +67,6 @@ class ItemControllerTest {
 
 	@Test
 	void updateItem() throws Exception {
-		MockMvc mvc = mockMvc();
 		Long ownerId = 1L;
 		Long itemId = 5L;
 
@@ -77,12 +78,15 @@ class ItemControllerTest {
 
 		when(itemService.updateItem(eq(ownerId), eq(itemId), any(ItemDto.class))).thenReturn(response);
 
-		String json = "{\"name\":\"Updated\",\"description\":\"New desc\",\"available\":false}";
+		ItemDto request = new ItemDto();
+		request.setName("Updated");
+		request.setDescription("New desc");
+		request.setAvailable(false);
 
-		mvc.perform(patch("/items/{itemId}", itemId)
+		mockMvc.perform(patch("/items/{itemId}", itemId)
 						.header(ItemController.USER_ID_HEADER, ownerId)
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(json))
+						.content(objectMapper.writeValueAsString(request)))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.id", is(5)))
 				.andExpect(jsonPath("$.name", is("Updated")))
@@ -91,7 +95,6 @@ class ItemControllerTest {
 
 	@Test
 	void getItem() throws Exception {
-		MockMvc mvc = mockMvc();
 		Long userId = 2L;
 		Long itemId = 10L;
 
@@ -103,7 +106,7 @@ class ItemControllerTest {
 
 		when(itemService.getItemById(itemId, userId)).thenReturn(response);
 
-		mvc.perform(get("/items/{itemId}", itemId)
+		mockMvc.perform(get("/items/{itemId}", itemId)
 						.header(ItemController.USER_ID_HEADER, userId))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.id", is(10)))
@@ -112,7 +115,6 @@ class ItemControllerTest {
 
 	@Test
 	void getMyItems() throws Exception {
-		MockMvc mvc = mockMvc();
 		Long ownerId = 1L;
 
 		ItemDto dto1 = new ItemDto();
@@ -125,7 +127,7 @@ class ItemControllerTest {
 
 		when(itemService.getOwnerItems(ownerId)).thenReturn(List.of(dto1, dto2));
 
-		mvc.perform(get("/items")
+		mockMvc.perform(get("/items")
 						.header(ItemController.USER_ID_HEADER, ownerId))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$", hasSize(2)))
@@ -135,7 +137,6 @@ class ItemControllerTest {
 
 	@Test
 	void searchItems() throws Exception {
-		MockMvc mvc = mockMvc();
 		String text = "it";
 
 		ItemDto dto = new ItemDto();
@@ -144,7 +145,7 @@ class ItemControllerTest {
 
 		when(itemService.getSearch(text)).thenReturn(List.of(dto));
 
-		mvc.perform(get("/items/search")
+		mockMvc.perform(get("/items/search")
 						.param("text", text))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$", hasSize(1)))
@@ -154,7 +155,6 @@ class ItemControllerTest {
 
 	@Test
 	void createComment() throws Exception {
-		MockMvc mvc = mockMvc();
 		Long userId = 1L;
 		Long itemId = 10L;
 
@@ -167,12 +167,13 @@ class ItemControllerTest {
 		when(itemService.createComment(eq(userId), eq(itemId), any(CreateCommentRequest.class)))
 				.thenReturn(response);
 
-		String json = "{\"text\":\"Nice\"}";
+		CreateCommentRequest request = new CreateCommentRequest();
+		request.setText("Nice");
 
-		mvc.perform(post("/items/{itemId}/comment", itemId)
+		mockMvc.perform(post("/items/{itemId}/comment", itemId)
 						.header(ItemController.USER_ID_HEADER, userId)
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(json))
+						.content(objectMapper.writeValueAsString(request)))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.id", is(100)))
 				.andExpect(jsonPath("$.text", is("Nice")))

@@ -1,5 +1,7 @@
 package ru.practicum.shareit.user;
 
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -12,8 +14,9 @@ import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserDtoUpdate;
 
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserClient extends BaseClient {
-	private static final String API_PREFIX_USERS = "/users";
+	static final String API_PREFIX_USERS = "/users";
 
 	@Autowired
 	public UserClient(@Value("${shareit-server.url}") String serverUrl, RestTemplateBuilder builder) {
